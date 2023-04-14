@@ -1,0 +1,230 @@
+---
+title: "QMM1002 Case Study  1"
+author:
+- Name Goodnews Agbadu
+- Student Number A00238219
+date: 'Due: February 22, 2022 at 11:59PM'
+output:
+  html_document: default
+  word_document: default
+  pdf_document: default
+extra_dependencies: xcolor
+---
+
+## Introduction
+
+For this case study, personal data was about how I spent my day as an international student in Canada, In order to collect these data, I used a personalized data sheet to record my daily activities from September 10th, 2021 to February 8th, 2022. I assigned a total of ten (10) variables such as shown in the table below.
+
+Variable | Type
+------------- | -------------
+Date | Identifier
+Hours in Class  | Quantitative
+Hours Studying  | Quantitative
+Hours Sleeping  | Quantitative
+Number of Times Leaving the House | Quantitative
+Watching the News | Categorical
+Games  | Categorical
+Stress Level (1 - 5)  | Categorical
+Calls| Quantitative
+Semester (F21 or W22) | Categorical
+
+The variables that will be analyzed are hours spent studying, hours sleeping, and number of time leaving the house.these three variables will be used to answer three questions; What do i do in a day?,Do i spend my days how i expect? and is any difference in how i spend my time this semester compared to last semester?. At the end of this data analysis, I seek to have a better understanding of how these variables affect my lifestyle by examining new insights.
+
+**Summary Statistics**
+
+```{r echo=FALSE}
+pd<-read.csv(file="Personalized Data -Goodnews.csv", header=TRUE)
+pd.3vars<-subset(pd, select=c("Study", "Sleep", "House"))
+summary(pd.3vars)
+```
+```{r include=FALSE}
+study.sd<-sd(pd$Study)
+sleep.sd<-sd(pd$Sleep)
+house.sd<-sd(pd$House)
+```
+The Standard deviation for study is `r study.sd` while for sleep is `r sleep.sd` and for House is `r house.sd` .
+
+
+**Conditions for using t-distribution**
+
+***1.Study***
+
+
+I checked the conditions for using a t-distribution for my personalized variable study. Independence assumption shows that the sample values are not independent of each other because my personal data were collected from two different semesters, therefore condition is not met. Though adjustment could be made in the data collection method such that only one semester data will be collected.
+
+For randomization Condition, this condition is not met because data was not randomly selected,Therefore there is a need for adjustments in the data collection method such that we use statistical tools such as R language to randomly select sample.10% Condition is not met because the sample size for study is larger than 10% of my total sample for the two semester duration.This could be adjusted by collecting sample once every two weeks within the two semester duration.
+
+To determine the nearly normal condition, i made a  histogram and box plot below which shows nearly normal. This implies that condition is met.
+
+```{r echo=FALSE}
+#Show output only
+hist(pd$Study, xlab="Study", main="Time Spent on Studying", col="red")
+boxplot(pd$Study, ylab="Study", main="Time Spent on Studying", col="red")
+```
+
+***2.Sleep***
+
+
+I checked the conditions for using a t-distribution for my personalized variable Hours Sleeping. Independence assumption shows that the sample values are not independent of each other because my personal data was collected from two different semesters, therefore condition is not met. Though adjustment could be made in the data collection method such that only one semester data will be collected.
+
+For randomization Condition, this condition is not met because data was not randomly selected,Therefore there is a need for adjustments in the data collection method such that we use statistical tools such as R language to randomly select sample.10% Condition is not met because the sample size for Hours Sleeping is larger than 10% of my total sample for the two semester duration.This could be adjusted by collecting sample once every two weeks within the two semester duration.
+
+To determine the nearly normal condition, i made a  histogram and box plot below which shows fairly symmetric. This implies that condition is met.
+
+
+```{r echo=FALSE}
+#Show output only
+hist(pd$Sleep, xlab="Sleep", main="Time Spent on Sleeping", col="red")
+boxplot(pd$Sleep, ylab="Sleep", main="Time Spent on Sleeping", col="red")
+```
+
+
+***3.House***
+
+I checked the conditions for using a t-distribution for my personalized variable number of times leaving the house. Independence assumption shows that the sample values are not independent of each other because my personal data was collected from two different semesters, therefore condition is not met. Though adjustment could be made in the data collection method such that only one semester data will be collected.
+
+For randomization Condition, this condition is not met because data was not randomly selected,Therefore there is a need for adjustments in the data collection method such that we use statistical tools such as R language to randomly select sample.10% Condition is not met because the sample size for variable number of times leaving the house is larger than 10% of my total sample for the two semester duration.This could be adjusted by collecting sample once every two weeks within the two semester duration.
+
+To determine the nearly normal condition, i made a  histogram and box plot below to illustrate variable number of times leaving the house which shows fairly skewed. This implies that condition is met.
+
+```{r echo=FALSE}
+#Show output only
+hist(pd$House, xlab="House", main="Number of Times Leaving the House", col="red")
+boxplot(pd$House, ylab="House", main="Number of Times Leaving the House", col="red")
+```
+
+## Data Analysis
+
+### Part 1: Confidence Intervals
+
+
+```{r include=FALSE}
+#Create a 95% confidence interval for the mean number of hours spent studying per day. Interpret the interval in the context of the problem.
+st.conf<-t.test(pd$Study, conf.level = 0.95)
+st.conf
+```
+
+The 95% confidence interval is between `r st.conf$conf` hours. Therefore, we are 95% confident that the mean number of hours spent studying per day is between `r st.conf$conf`.From the interval it seem like I study every day because the hours spent studying per day is between `r st.conf$conf`with 95% confidence interval. This result is not surprising to me because unlike the fall semester, the winter semester seems more challenging with higher workloads especially in connected data that requires weekly projects in python programming language.
+
+```{r include=FALSE}
+#Create a 95% confidence interval for the mean number of hours spent sleeping per day. Interpret the interval in the context of the problem.
+sl.conf<-t.test(pd$Sleep, conf.level = 0.95)
+sl.conf
+```
+
+The 95% confidence interval is between `r sl.conf$conf` hours. Therefore, we are 95% confident that the mean number of hours spent Sleeping per day is between `r sl.conf$conf`.From the interval it seem like I sleeping every day because the hours spent sleeping per day is between `r sl.conf$conf`with 95% confidence interval. This result is not surprising to me because getting a proper amount of sleep at night helps to stay focused, improve concentration, and improve academic performance.Relating the results to my personalized data having 6 hours average sleeping time per day may also suggests that I sleep less than 7 hours which is the minimum recommended sleeping time for my age range.This I will attribute to my winter semester workload. 
+
+```{r include=FALSE}
+#Create a 95% confidence interval for the mean of the quantitative variable of your choice (variable 9). Interpret the interval in the context of the problem.
+h.conf<-t.test(pd$House, conf.level = 0.95)
+h.conf
+
+```
+
+The 95% confidence interval is between `r h.conf$conf` hours. Therefore, we are 95% confident that the mean number of times leaving the house per day is between `r h.conf$conf`.From the interval it seems like i did not leave my house everyday, this result is not surprising to me because during the winter season in the city of Sudbury, minimum temperature is below -30(c) which is freezing for me, owning to the fact that I am still adapting to the Canadian weather as an international student.Therefore this implies that I spent more time at home during the winter semester when compared to the fall semester. 
+
+
+### Part 2: One-Sample Hypothesis Tests
+
+```{r include=FALSE}
+#mean number of hours studied is greater than 3.13 hours per day
+hst<-t.test(pd$Study, alternative="greater", mu = 3.13)
+hst
+```
+
+The test for hypothesis ($H_0: \mu = 3.13$, $H_A: \mu > 3.13$) that my mean number of hours studied is greater than 3.13 hours per day. Performing the test at $\alpha = 0.05$ returned a p-value of `r hst$p.value`, we reject the null because there is evidence that I study more on average than McGill students. This result shows that I study more than McGill University students that study 3.13 hours per day. This result is not surprising because from my personalized data shows a mean for the study variable as 4.33 hours, that is to say i study 4.33 hours on the average daily.These study time is required in order to meet up with the semesters work load.
+
+```{r include=FALSE}
+# How many hours do you think you spend sleeping per day? Test your hypothesis using a two-sided
+#test at the 0.05 level of significance
+hslp<-t.test(pd$Sleep, alternative = "two.sided", mu = 5)
+hslp
+```
+The test for hypothesis ($H_0: \mu = 5$, $H_A: \mu \neq 5$) that I spend 5 hours sleeping per day. Performing the test at $\alpha = 0.05$ returned a p-value of `r hslp$p.value`, we reject the null because there is evidence that spend a DIFFERENT amount of hours sleeping per day than 5.
+
+```{r include=FALSE}
+#Create a set of hypotheses to test relating to your quantitative variable of choice (variable 9). Test at the 0.05 level of significance
+#that i live my house more than 10 times a day
+hhu<-t.test(pd$House, alternative = "greater", mu = 10)
+hhu
+
+
+```
+The test for hypothesis ($H_0: \mu = 10$, $H_A: \mu > 10$) number of times i left the house per day is greater than 10. Performing the test at $\alpha = 0.05$ returned a p-value of `r hhu$p.value` we do not reject the null because there is no evidence that the number of times I left the house per day is greater than 10. This result is not surprising because as an international student studying virtually, it is challenging to meet people or have a social support in my new environment. Furthermore, most of my groceries shopping are done online thereby reducing my chances of leaving the house.
+
+
+### Part 3: Two-Sample Hypothesis Tests
+```{r include=FALSE}
+#create subsets by term
+gFall<-subset(pd, Semester=="F21", select="Study")
+gWinter<-subset(pd, Semester=="W22", select="Study")
+
+```
+This section of the analysis is focusing on two-sample hypothesis tests. To conduct this test, I group my study variable in the personalized data in to subsets and the independent groups assumption shows that data was collected from a single individual(my personalized data) which implies that the condition is not met.
+
+
+```{r include=FALSE}
+#part 3.2 - create a random sample of 10 days from each subset
+#This selects a random valve each time.
+gFall3.2<-sample(gFall$Study, 10)
+gWinter3.2<-sample(gWinter$Study, 10)
+
+t.tst<-t.test(gWinter3.2, gFall3.2,
+       var.equal=FALSE, #independent groups
+       paired=FALSE, #independent groups
+       conf.level=0.95, #alpha = 0.05
+       alternative="greater", 
+       mu = 0)
+t.tst
+
+mean(gWinter3.2)
+mean(gFall3.2)
+
+```
+
+Testing the hypothesis that I spent more time studying per day during fall semester than winter semester. To test this hypothesis, I am using a two-sample t-test because I am  selecting 10 random days I assume that because of the randomization, the 10 days from each semester will be seen  as independent from each other.
+
+The test for hypothesis ($H_0: \mu{Winter}-\mu{Fall} = 0$, $H_A: \mu{Winter}-\mu{Fall} > 0$) using 10 random selected days, that i spent more time studying per day during fall semester than winter semester. Performing the test returned a p-value of `r t.tst$p.value`  >  $\alpha = 0.05$. We do not reject the null because there is no significant evidence that I  spent more time studying per day during fall semester than winter semester
+ 
+```{r include=FALSE}
+#part 3.3 - select the first 10 days from each subset
+gFall3.3<-gFall[1:10,1]
+gWinter3.3<-gWinter[1:10,1]
+
+#As a paired t test
+ptest<-t.test(gWinter3.3, gFall3.3,
+       alternative="greater", mu=0,
+       var.equal=FALSE,
+       paired=TRUE)
+ptest
+```
+Testing the hypothesis that I spent more time studying per day during first 10 days of fall semester than winter semester. To test this hypothesis, i am using a paired test because two-sample t-test and pooled test are based on the assumption that the groups are independent of each other.This assumption is violated when the groups are related or dependent as it is this analysis.
+
+The test for hypothesis ($H_0: \mu_d = 0$, $H_A: \mu_d > 0$) that I spent more time studying per day during first 10 days of fall semester than winter semester. Performing the test returned a p-value of `r ptest$p.value` > $\alpha = 0.05$. We do not reject the null because there is no  significant evidence that i spent more time studying per day during first 10 days of winter semester than fall semester. This result was expected because the first week of the fall semester was mainly introduction and get to know you class setting compared to winter semester that i did assignment from the first week.
+
+
+
+## Conclusion
+
+After analyzing the data collected from September 10th,to February 8th, 2022, I can better understand how I spend my days within the fall and winter semester.
+
+The results from this analysis enabled me to better understand what I do in a day, in relation to my personalized variables Hours Studying, Hours Sleeping and Number of times leaving the house. The summary statistics showed that I spend an average of 4.338 hours studying per day and 6.379 hours sleeping per day.Furthermore, looking at Number of times leaving the house showed 1.967 times which mean I spend more time at home sleeping and studying.
+
+I always expect to have a good sleeping habit with a balanced social life; it is challenging to keep track of my daily activities. This analysis made me to understand that I do not spend my days how I expected it in relation to Hours Studying, Hours Sleeping and Number of times leaving the house. The results shows that I study more than McGill University students that study 3.13 hours per day also, having 6.379 hours average sleeping time per day may also suggests that I sleep less than 7 hours which is the minimum recommended sleeping time for my age range.Further more, looking at my histogram for Number of times leaving the house shows a frequency of 50 between 0 and 1 which implies that I spend most of my days at home.
+
+Looking at the difference in relation to how I spend my days between the fall semester and winter semester, the analysis showed that I studied more in winter semester with an average study of 5.94 hours per day when compare to fall semester with an average study of 2.4 hours per day.This result is not surprising to me because unlike the fall semester, the winter semester seems more challenging with higher workloads especially in connected data that requires weekly projects in python programming language.
+
+By completing this report, I have learned about my daily habit such as increased study time, unbalance social life and less sleeping time. To address this habit that might impact my life at the long run, I have decided to implement the following;
+
+a. Join a few clubs
+b. Take care of your body by registering at the gym
+c. Coordinate my free time with friends
+
+
+
+
+
+
+
+
+
